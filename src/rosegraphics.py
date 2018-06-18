@@ -1511,7 +1511,7 @@ class Square(_ShapeWithCenter, _ShapeWithOutline):
        square.center = rg.Point(x - 50, y + 60)
     """
 
-    def __init__(self, center, length_of_each_side):
+    def __init__(self, center: object, length_of_each_side: object) -> object:
         """
           :type  center:  rg.Point
           :type  length_of_each_side:  int

@@ -9,8 +9,8 @@ Additionally, it emphasizes that you must
 before you can implement a solution to the problem in Python. 
   
 Authors: David Mutchler, Dave Fisher, Valerie Galluzzi, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Siwei Xu.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
@@ -97,8 +97,28 @@ def draw_squares_from_circle(n, circle, window):
       :type circle: rg.Circle
       :type window: rg.RoseWindow
     """
+    a = circle.center.x
+    b = circle.center.y
+
+    end_point = rg.Point(a - circle.radius, b - circle.radius)
+
+    square = rg.Square(end_point, 2 * circle.radius)
+
+    x = square.center.x
+    y = square.center.y
+
+    for _ in range(n):
+        x = x + circle.radius
+        y = y + circle.radius
+        point = rg.Point(x, y)
+        square = rg.Square(point, 2 * circle.radius)
+
+        square.attach_to(window)
+        circle.attach_to(window)
+
+    window.render()
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # DONE: 2. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -122,7 +142,7 @@ def run_test_draw_circles_from_rectangle():
     print('--------------------------------------------------')
 
     # ------------------------------------------------------------------
-    # TODO: 3. Implement this TEST function.
+    # DONE: 3. Implement this TEST function.
     #   It TESTS the  draw_circles_from_rectangle  function
     #   defined below.  Include at least **   3   ** tests, of which
     #      ***  at least TWO tests are on ONE window and
@@ -134,6 +154,37 @@ def run_test_draw_circles_from_rectangle():
     #   Follow the same form as the example in a previous problem.
     ####################################################################
     # ------------------------------------------------------------------
+    title1 = 'Tests 1 and 2 of DRAW_CIRCLES_FROM_RECTANGLE: '
+    title1 = title1 + ' 14 dark blue and pink circles from a rectangle'
+
+    window1 = rg.RoseWindow(600, 300, title1)
+
+    # Test 1:
+    rectangle = rg.Rectangle(rg.Point(100, 100), rg.Point(150, 140))
+    rectangle.fill_color = 'dark blue'
+    draw_circles_from_rectangle(3, 5, rectangle, window1)
+
+    # Test 2:
+    rectangle = rg.Rectangle(rg.Point(320, 200), rg.Point(360, 270))
+    rectangle.fill_color = 'pink'
+    draw_circles_from_rectangle(2, 4, rectangle, window1)
+
+
+    # ------------------------------------------------------------------
+    # A third test on ANOTHER window.
+    # ------------------------------------------------------------------
+    title2 = 'Test 3 of DRAW_CIRCLES_FROM_RECTANGLE: '
+    title2 += ' 8 teeny circles from khaki rectangle!'
+
+    window2 = rg.RoseWindow(600, 300, title2)
+
+    # Test 3:
+    rectangle = rg.Rectangle(rg.Point(400, 200), rg.Point(430, 230))
+    rectangle.fill_color = 'khaki'
+    draw_circles_from_rectangle(4, 4, rectangle, window1)
+
+    window2.close_on_mouse_click()
+    window1.close_on_mouse_click()
 
 
 def draw_circles_from_rectangle(m, n, rectangle, window):
@@ -175,6 +226,23 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
       :type rectangle: rg.Rectangle
       :type window: rg.RoseWindow
     """
+    x = (rectangle.corner_2.x + rectangle.corner_1.x)/2
+    y = (rectangle.corner_2.y + rectangle.corner_1.y)/2
+
+    width = rectangle.corner_2.x - rectangle.corner_1.x
+    length = rectangle.corner_2.y - rectangle.corner_1.y
+
+    for _ in range(m):
+        radius_m = 0.5 * length
+        center = rg.Point(x - width - radius_m, y)
+        circle = rg.Circle(center, radius_m)
+        circle.center.x -= 2 * radius_m
+        circle = rg.Circle(circle.center, radius_m)
+
+        rectangle.attach_to(window)
+        circle.attach_to(window)
+
+    window.render()
     # ------------------------------------------------------------------
     # TODO: 4. Implement and test this function.
     #          Tests have been written for you (above).
