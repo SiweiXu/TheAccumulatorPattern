@@ -168,6 +168,8 @@ def run_test_draw_circles_from_rectangle():
     rectangle = rg.Rectangle(rg.Point(320, 200), rg.Point(360, 270))
     rectangle.fill_color = 'pink'
     draw_circles_from_rectangle(3, 4, rectangle, window1)
+
+    window1.close_on_mouse_click()
     # ------------------------------------------------------------------
     # A third test on ANOTHER window.
     # ------------------------------------------------------------------
@@ -183,7 +185,6 @@ def run_test_draw_circles_from_rectangle():
     draw_circles_from_rectangle(4, 4, rectangle, window2)
 
     window2.close_on_mouse_click()
-    window1.close_on_mouse_click()
 
 
 def draw_circles_from_rectangle(m, n, rectangle, window):
@@ -342,29 +343,45 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
       :type n: int
       :type window: rg.RoseWindow
       """
-    x1 = (rectangle1.corner_1.x + rectangle1.corner_1.x) / 2
-    y1 = (rectangle1.corner_1.y + rectangle1.corner_1.y) / 2
-
-    begin = rg.Point(x1, y1)
+    x1 = (rectangle1.corner_1.x + rectangle1.corner_2.x) / 2
+    y1 = (rectangle1.corner_1.y + rectangle1.corner_2.y) / 2
 
     x2 = (rectangle2.corner_1.x + rectangle2.corner_2.x) / 2
     y2 = (rectangle2.corner_1.y + rectangle2.corner_2.y) / 2
 
-    end = rg.Point(x2, y2)
+    move_x = abs(rectangle1.corner_2.x - rectangle1.corner_1.x) / 2
+    move_y = abs(rectangle1.corner_1.y - rectangle1.corner_2.y) / 2
 
-    begin2 = rg.Point(rectangle1.corner_1.x, rectangle1.corner_2.y)
+    R1_color = rectangle1.outline_color
+    R2_color = rectangle2.outline_color
 
-    for _ in range(n):
+    for k in range(n):
+        begin = rg.Point(x1, y1)
+        end = rg.Point(x2, y2)
         line = rg.Line(begin, end)
-        begin = x2 + rectangle1.corner_1.x - x1
-        end = y2 + rectangle1.corner_2.y - y1
+
+        line.thickness = 5
+
+        x1 = x1 - move_x
+        x2 = x2 - move_x
+        y1 = y1 + move_y
+        y2 = y2 + move_y
+
+        if k % 2 == 0:
+            line.color = R1_color
+
+        if k % 2 == 1:
+            line.color = R2_color
 
         line.attach_to(window)
+
+    rectangle1.attach_to(window)
+    rectangle2.attach_to(window)
 
     window.render()
 
     # ------------------------------------------------------------------
-    # TODO: 5. Implement and test this function.
+    # DONE: 5. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
